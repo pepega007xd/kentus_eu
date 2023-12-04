@@ -52,11 +52,11 @@ fn Cell(select: WriteSignal<CellType>) -> impl IntoView {
         <p>How to insert data into table cells:</p>
 
         <input type="radio" name="celltype" id="brackets" value="brackets" checked="checked"
-            on:input=move |_| {select(CellType::SquareBrackets)}/>
+            on:input=move |_| {select.set(CellType::SquareBrackets)}/>
         <label for="brackets">square brackets (regular text)</label>
 
         <input type="radio" name="celltype" id="dollars" value="dollars"
-            on:input=move |_| {select(CellType::Dollars)}/>
+            on:input=move |_| {select.set(CellType::Dollars)}/>
         <label for="dollars">dollars (equation)</label>
     }
 }
@@ -67,7 +67,7 @@ fn TextField(sink: WriteSignal<String>) -> impl IntoView {
         <textarea
         placeholder="Input: "
         on:input=move |ev| {
-            sink(event_target_value(&ev));
+            sink.set(event_target_value(&ev));
         }
         />
     }
@@ -78,7 +78,7 @@ fn OutputField(source: ReadSignal<String>, select: ReadSignal<CellType>) -> impl
     view! {
         <textarea placeholder="Output: " readonly=true >
         {move || {
-            let output = convert(source(), select());
+            let output = convert(source.get(), select.get());
             output
             }}
         </textarea>
