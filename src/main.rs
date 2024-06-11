@@ -2,9 +2,10 @@ use chrono::prelude::*;
 use leptos::{html::Canvas, *};
 use leptos_router::*;
 
+mod game_of_life;
 mod typst_table;
+
 use plotters::prelude::*;
-use typst_table::TypstTable;
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Copy)]
 struct Temperature {
@@ -159,16 +160,25 @@ fn rickroll() -> impl IntoView {
         .unwrap();
 }
 
+#[component]
+fn not_found() -> impl IntoView {
+    view! {
+        <h1> "404 (from Leptos)" </h1>
+    }
+}
+
 fn main() {
     mount_to_body(move || {
         view! {
             <Router>
                 <Routes>
                     <Route path="/" view=Home/>
-                    <Route path="/typst_table" view=TypstTable/>
+                    <Route path="/typst_table" view=typst_table::TypstTable/>
+                    <Route path="/game_of_life" view=game_of_life::GameOfLife/>
                     // obvious and non-obvious one
                     <Route path="/link" view=Rickroll/>
                     <Route path="/secret/6a892a61d2cca1794717f1413d39e43f" view=Rickroll/>
+                    <Route path="/*" view=NotFound/>
                 </Routes>
             </Router>
         }
