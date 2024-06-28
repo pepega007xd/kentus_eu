@@ -9,7 +9,7 @@ cargo install trunk
 ## Build
 
 ```bash
-trunk build --release`
+trunk build --release
 ```
 
 Then the built website is available in `dist/`
