@@ -11,7 +11,7 @@ use typst_table::TypstTable;
 struct Temperature {
     temperature: f32,
     humidity: f32,
-    timestamp: DateTime<Utc>,
+    timestamp: NaiveDateTime,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone)]
@@ -79,7 +79,7 @@ fn create_graph(data: TemperatureHistory) -> Option<HtmlElement<Canvas>> {
         .x_labels(10)
         .x_label_formatter(&|v| {
             let utc_time = first_sample_timestamp + Duration::minutes(*v);
-            let local_time: DateTime<Local> = utc_time.into();
+            let local_time: DateTime<Local> = utc_time.and_utc().into();
             format!("{:00}:00", local_time.hour())
         })
         .y_label_formatter(&|v| format!("{v} ℃",))
@@ -139,16 +139,11 @@ fn home() -> impl IntoView {
 
         <h3>"Some links"</h3>
         <a href="https://filebrowser.kentus.eu">"File Browser"</a><br/>
-        // _blank is so that browser makes a separate request -> nginx serves different file
-        <a href="frama-c-api/" target="_blank">"Frama-C documentation"</a><br/>
-        <a href="frama-c-server-api/" target="_blank">"Frama-C Server documentation"</a><br/>
-        <a href="astral-api/" target="_blank">"Astral solver documentation"</a><br/>
         <a href="typst_table">"Typst table generator"</a>
         <br/>
 
         <h3>LAN only</h3>
         <a href="https://qbt.kentus.eu/">"qBittorrent"</a><br/>
-        <a href="https://grafana.kentus.eu/">"Grafana"</a><br/>
 
         <Temperature/>
         <br/> <br/>
