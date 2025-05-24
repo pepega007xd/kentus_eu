@@ -1,5 +1,7 @@
 use chrono::prelude::*;
 use chrono::Duration;
+use leptos::leptos_dom::logging::console_log;
+use leptos::logging::log;
 use leptos::{html::Canvas, *};
 use leptos_router::*;
 
@@ -11,7 +13,7 @@ use typst_table::TypstTable;
 struct Temperature {
     temperature: f32,
     humidity: f32,
-    timestamp: NaiveDateTime,
+    record_timestamp: NaiveDateTime,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone)]
@@ -51,11 +53,13 @@ fn Temperature() -> impl IntoView {
 fn create_graph(data: TemperatureHistory) -> Option<HtmlElement<Canvas>> {
     // calculated limits of the graph
     let data = data.values.iter().rev();
-    let temp_min = data.clone().map(|t| t.temperature as i32 - 1).min()? as f32;
+    let temp_min = data.clone().map(|t| t.temperature as i32).min()? as f32;
     let temp_max = data.clone().map(|t| t.temperature as i32 + 1).max()? as f32;
-    let data_duration_minutes =
-        (data.clone().last()?.timestamp - data.clone().next()?.timestamp).num_minutes();
-    let first_sample_timestamp = data.clone().next()?.timestamp;
+
+    let data_duration_minutes = (data.clone().last()?.record_timestamp
+        - data.clone().next()?.record_timestamp)
+        .num_minutes();
+    let first_sample_timestamp = data.clone().next()?.record_timestamp;
 
     // create the canvas
     let canvas = html::canvas();
@@ -84,7 +88,7 @@ fn create_graph(data: TemperatureHistory) -> Option<HtmlElement<Canvas>> {
         })
         .y_label_formatter(&|v| format!("{v} ℃",))
         .y_labels(10)
-        .max_light_lines(0)
+        .max_light_lines(1)
         .draw()
         .ok()?;
 
@@ -93,7 +97,7 @@ fn create_graph(data: TemperatureHistory) -> Option<HtmlElement<Canvas>> {
         .draw_series(LineSeries::new(
             data.clone().map(|t| {
                 (
-                    (t.timestamp - first_sample_timestamp).num_minutes(),
+                    (t.record_timestamp - first_sample_timestamp).num_minutes(),
                     t.temperature as f32,
                 )
             }),
@@ -161,6 +165,8 @@ fn rickroll() -> impl IntoView {
 }
 
 fn main() {
+    console_error_panic_hook::set_once();
+
     mount_to_body(move || {
         view! {
             <Router>
