@@ -1,15 +1,14 @@
 use chrono::prelude::*;
 use chrono::Duration;
-use leptos::leptos_dom::logging::console_log;
-use leptos::logging::log;
 use leptos::{html::Canvas, *};
 use leptos_router::*;
 
 mod typst_table;
 use plotters::prelude::*;
+use serde::Deserialize;
 use typst_table::TypstTable;
 
-#[derive(serde::Serialize, serde::Deserialize, Clone, Copy)]
+#[derive(serde::Serialize, serde::Deserialize, Clone)]
 struct Temperature {
     temperature: f32,
     humidity: f32,
@@ -17,8 +16,21 @@ struct Temperature {
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone)]
+struct OutdoorTemperature {
+    temperature: f32,
+    pressure: f32,
+    humidity: f32,
+    record_timestamp: NaiveDateTime,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Clone)]
 struct TemperatureHistory {
     values: Vec<Temperature>,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Clone)]
+struct OutdoorTemperatureHistory {
+    values: Vec<OutdoorTemperature>,
 }
 
 #[component]
@@ -46,6 +58,44 @@ fn Temperature() -> impl IntoView {
                     t.temperature,
                     t.humidity)
                 .into_view()
+        }}
+    }
+}
+
+#[component]
+fn OutdoorTemperature() -> impl IntoView {
+    let temperature = create_resource(
+        || (),
+        |_| async move {
+            let json = reqwest::get("https://api.kentus.eu/outdoor_temperature")
+                .await
+                .ok()?
+                .text()
+                .await
+                .ok()?;
+            let temperature: OutdoorTemperature = serde_json::from_str(&json).unwrap();
+            Some(temperature)
+        },
+    );
+
+    view! {
+        <h3>"Outdoor temperature"</h3>
+        {move || match temperature.get().flatten() {
+            None => "Loading...".into_view(),
+            Some(t) =>
+                format!(
+                        "{:.2} ˚C (relative humidity {:.1}%)",
+                        t.temperature,
+                        t.humidity).into_view()
+        }}
+        <h3>Pressure</h3>
+        {move || match temperature.get().flatten() {
+            None => "Loading...".into_view(),
+            Some(t) =>
+                format!(
+                        "{:.1} hPa",
+                        t.pressure / 100.
+                ).into_view()
         }}
     }
 }
@@ -150,7 +200,8 @@ fn home() -> impl IntoView {
         <a href="https://qbt.kentus.eu/">"qBittorrent"</a><br/>
 
         <Temperature/>
-        <br/> <br/>
+        <OutdoorTemperature/>
+        <br/>
         <TemperatureGraph/>
     }
 }
