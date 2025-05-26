@@ -5,17 +5,17 @@ use leptos_router::*;
 
 mod typst_table;
 use plotters::prelude::*;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use typst_table::TypstTable;
 
-#[derive(serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 struct Temperature {
     temperature: f32,
     humidity: f32,
     record_timestamp: NaiveDateTime,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 struct OutdoorTemperature {
     temperature: f32,
     pressure: f32,
@@ -23,12 +23,12 @@ struct OutdoorTemperature {
     record_timestamp: NaiveDateTime,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 struct TemperatureHistory {
     values: Vec<Temperature>,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 struct OutdoorTemperatureHistory {
     values: Vec<OutdoorTemperature>,
 }
@@ -198,6 +198,8 @@ fn home() -> impl IntoView {
 
         <h3>LAN only</h3>
         <a href="https://qbt.kentus.eu/">"qBittorrent"</a><br/>
+        <a href="https://pufferpanel.kentus.eu/">"PufferPanel"</a><br/>
+        <a href="https://scanner.kentus.eu/">"Scanner"</a><br/>
 
         <Temperature/>
         <OutdoorTemperature/>
