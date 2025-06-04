@@ -160,23 +160,19 @@ fn create_graph(data: TemperatureHistory) -> Option<HtmlElement<Canvas>> {
 }
 
 #[component]
-fn TemperatureGraph() -> impl IntoView {
+fn TemperatureGraph(endpoint: &'static str, title: &'static str) -> impl IntoView {
     let data = create_resource(
-        || (),
-        |_| async move {
-            let json = reqwest::get("https://api.kentus.eu/temperature/history")
-                .await
-                .ok()?
-                .text()
-                .await
-                .ok()?;
+        move || (endpoint),
+        async |endpoint| {
+            let url = endpoint.to_string();
+            let json = reqwest::get(url).await.ok()?.text().await.ok()?;
             let temperature: TemperatureHistory = serde_json::from_str(&json).unwrap();
             Some(temperature)
         },
     );
 
     view! {
-        <h3>"Temperature history (24 h)"</h3>
+        <h3>{title}</h3>
         {move || match data.get().flatten() {
             None => "Loading...".into_view(),
             Some(data) => create_graph(data).into_view()
@@ -203,7 +199,8 @@ fn home() -> impl IntoView {
         <Temperature/>
         <OutdoorTemperature/>
         <br/>
-        <TemperatureGraph/>
+        <TemperatureGraph endpoint="https://api.kentus.eu/temperature/history" title="Indoor temperature (24h)"/>
+        <TemperatureGraph endpoint="https://api.kentus.eu/outdoor_temperature/history" title="Outdoor temperature (24h)"/>
     }
 }
 
