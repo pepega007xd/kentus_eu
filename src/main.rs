@@ -113,10 +113,10 @@ fn create_graph(data: TemperatureHistory) -> Option<HtmlElement<Canvas>> {
 
     // create the canvas
     let canvas = html::canvas();
-    let orig_size = (canvas.width(), canvas.height());
+    let orig_width = canvas.width();
     canvas.set_width(canvas.width() * 2);
     canvas.set_height(canvas.height() * 2);
-    let canvas = canvas.attr("style", format!("width: {}px;", orig_size.0));
+    let canvas = canvas.attr("style", format!("width: {}px;", orig_width));
     let canvas2 = (*canvas).clone();
     let backend = plotters_canvas::CanvasBackend::with_canvas_object(canvas2)?;
     let root = backend.into_drawing_area();
@@ -130,11 +130,10 @@ fn create_graph(data: TemperatureHistory) -> Option<HtmlElement<Canvas>> {
 
     chart
         .configure_mesh()
-        .x_labels(10)
         .x_label_formatter(&|v| {
             let utc_time = first_sample_timestamp + Duration::minutes(*v);
             let local_time: DateTime<Local> = utc_time.and_utc().into();
-            format!("{:00}:00", local_time.hour())
+            format!("{}:{:02}", local_time.hour(), local_time.minute())
         })
         .y_label_formatter(&|v| format!("{v} ℃",))
         .y_labels(10)
