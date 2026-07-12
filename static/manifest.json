@@ -1,0 +1,9 @@
+{
+  "name": "kentus.eu",
+  "short_name": "kentus.eu",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "browser",
+  "scope": "/",
+  "start_url": "/"
+}
