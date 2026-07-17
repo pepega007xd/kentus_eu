@@ -33,10 +33,13 @@ const translations: Record<Locale, Record<string, string>> = {
         humidity_label: 'Humidity (%)',
         pressure_label: 'Pressure (hPa)',
         admin_panel: 'Administration panel',
-        rel_humidity: 'relative humidity'
+        rel_humidity: 'relative humidity',
+        theme_light: 'Light',
+        theme_dark: 'Dark',
+        theme_system: 'System'
     },
     cs: {
-        subtitle: 'Teď se 400 % méně wasmu a 800 % více slopu!',
+        subtitle: 'Teď se 400% méně wasmu a 800% více slopu!',
         public_apps: 'Veřejné aplikace',
         private_apps: 'Soukromé aplikace',
         private_apps_desc: 'Dostupné jen v domácí síti nebo přes VPN',
@@ -64,7 +67,10 @@ const translations: Record<Locale, Record<string, string>> = {
         humidity_label: 'Vlhkost (%)',
         pressure_label: 'Tlak (hPa)',
         admin_panel: 'Administrační panel',
-        rel_humidity: 'relativní vlhkost'
+        rel_humidity: 'relativní vlhkost',
+        theme_light: 'Světlý',
+        theme_dark: 'Tmavý',
+        theme_system: 'Systém'
     }
 };
 

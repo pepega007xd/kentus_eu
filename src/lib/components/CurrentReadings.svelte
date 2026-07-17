@@ -34,15 +34,19 @@
             <span class="reading-sub">{$t('rel_humidity')} {formatHumidity(reading.humidity)}</span>
         </div>
     {/if}
+</div>
 
-    {#if location === 'outdoor'}
-        <h3 style="margin-top: 0.75rem;">{$t('pressure')}</h3>
+{#if location === 'outdoor'}
+    <div class="card">
+        <h3>{$t('pressure')}</h3>
         {#if loading}
             <span class="loading">{$t('loading')}</span>
         {:else if error || !reading}
             <span class="error">{$t('failed_load')}</span>
         {:else}
-            <span class="reading-secondary">{formatPressure(reading.pressure)}</span>
+            <div class="reading-main">
+                <span class="reading-value">{formatPressure(reading.pressure)}</span>
+            </div>
         {/if}
-    {/if}
-</div>
+    </div>
+{/if}

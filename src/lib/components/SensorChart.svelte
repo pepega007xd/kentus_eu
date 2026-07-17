@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { onDestroy } from 'svelte';
+    import { onDestroy, untrack } from 'svelte';
     import Chart from 'chart.js/auto';
     import 'chartjs-adapter-date-fns';
     import { getHistory } from '$lib/api';
     import { t, locale } from '$lib/i18n';
+    import { effectiveTheme } from '$lib/theme';
     import { colors } from '$lib/colors';
     import type { SensorLocation, SensorReading } from '$lib/types';
     import type { TooltipItem, ChartEvent, LegendItem, LegendElement } from 'chart.js';
@@ -15,6 +16,7 @@
     let loading = $state(true);
     let error = $state(false);
     let selectedDays = $state(1);
+    let lastData: SensorReading[] | null = null;
 
     const dayOptions = [1, 3, 7];
 
@@ -198,6 +200,7 @@
         try {
             const count = selectedDays * 1440;
             const data = await getHistory(location, count);
+            lastData = data;
             if (data.length === 0) {
                 if (chart) chart.destroy();
                 chart = null;
@@ -206,6 +209,7 @@
             }
         } catch {
             error = true;
+            lastData = null;
             if (chart) {
                 chart.destroy();
                 chart = null;
@@ -220,6 +224,17 @@
         $locale;
         $t;
         fetchData($t);
+    });
+
+    // Rebuild from cached data when the effective theme changes (covers forced
+    // light/dark as well as system changes). No network refetch.
+    $effect(() => {
+        $effectiveTheme;
+        untrack(() => {
+            if (lastData && lastData.length > 0 && canvas) {
+                buildChart(lastData, $t);
+            }
+        });
     });
 
     onDestroy(() => {

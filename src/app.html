@@ -3,7 +3,22 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/png" href="/icons/koteseni.png" />
         <link rel="manifest" href="/manifest.json" />
+        <script>
+            (function () {
+                try {
+                    var pref = localStorage.getItem('theme') || 'system';
+                    var eff =
+                        pref === 'system'
+                            ? window.matchMedia('(prefers-color-scheme: light)').matches
+                                ? 'light'
+                                : 'dark'
+                            : pref;
+                    document.documentElement.setAttribute('data-theme', eff);
+                } catch (e) {}
+            })();
+        </script>
         %sveltekit.head%
     </head>
     <body data-sveltekit-preload-data="hover">

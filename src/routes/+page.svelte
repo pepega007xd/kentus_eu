@@ -1,6 +1,7 @@
 <script lang="ts">
     import CurrentReadings from '$lib/components/CurrentReadings.svelte';
     import SensorChart from '$lib/components/SensorChart.svelte';
+    import ThemeToggle from '$lib/components/ThemeToggle.svelte';
     import { t, locale, setLocale, type Locale } from '$lib/i18n';
 </script>
 
@@ -13,9 +14,12 @@
         <h1>kentus.eu</h1>
         <p class="subtitle">{$t('subtitle')}</p>
     </div>
-    <div class="locale-toggle">
-        <button class="locale-btn" class:active={$locale === 'en'} onclick={() => setLocale('en')}>EN</button>
-        <button class="locale-btn" class:active={$locale === 'cs'} onclick={() => setLocale('cs')}>CS</button>
+    <div class="header-actions">
+        <div class="locale-toggle">
+            <button class="locale-btn" class:active={$locale === 'en'} onclick={() => setLocale('en')}>EN</button>
+            <button class="locale-btn" class:active={$locale === 'cs'} onclick={() => setLocale('cs')}>CS</button>
+        </div>
+        <ThemeToggle />
     </div>
 </div>
 
