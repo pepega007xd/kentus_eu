@@ -107,6 +107,26 @@ input[type='radio'] {
     margin-right: 0.25rem;
 }
 
+.cell-type-group {
+    margin-bottom: 0;
+}
+
+.cell-type-group label.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    user-select: none;
+}
+
+.cell-type-group input[type='radio'] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
 .btn-group {
     display: inline-flex;
     gap: 0;

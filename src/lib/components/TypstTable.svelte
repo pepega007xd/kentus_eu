@@ -8,24 +8,27 @@
     let output = $derived(convertToTypstTable(input, cellType));
 </script>
 
-<h2>{$t('typst_heading')}</h2>
+<h1>{$t('typst_page_title')}</h1>
+<p class="card-desc">{$t('typst_heading')}</p>
 
 <div class="card">
-    <p>{$t('cell_type')}</p>
-    <label>
-        <input
-            type="radio"
-            name="celltype"
-            value="brackets"
-            checked
-            onchange={() => (cellType = 'brackets')}
-        />
-        {$t('brackets')}
-    </label>
-    <label style="margin-left: 1rem;">
-        <input type="radio" name="celltype" value="dollars" onchange={() => (cellType = 'dollars')} />
-        {$t('dollars')}
-    </label>
+    <p class="card-desc">{$t('cell_type')}</p>
+    <div class="btn-group cell-type-group">
+        <label class="btn" class:active={cellType === 'brackets'}>
+            <input
+                type="radio"
+                name="celltype"
+                value="brackets"
+                checked
+                onchange={() => (cellType = 'brackets')}
+            />
+            {$t('brackets')}
+        </label>
+        <label class="btn" class:active={cellType === 'dollars'}>
+            <input type="radio" name="celltype" value="dollars" onchange={() => (cellType = 'dollars')} />
+            {$t('dollars')}
+        </label>
+    </div>
 </div>
 
 <div class="card">

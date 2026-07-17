@@ -7,6 +7,4 @@
     <title>{$t('typst_title')}</title>
 </svelte:head>
 
-<a href="/">{$t('back_home')}</a>
-
 <TypstTable />
