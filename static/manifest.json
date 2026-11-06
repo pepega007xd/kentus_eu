@@ -3,13 +3,19 @@
   "short_name": "kentus.eu",
   "theme_color": "#000000",
   "background_color": "#000000",
-  "display": "browser",
+  "display": "standalone",
   "scope": "/",
   "start_url": "/",
+  "id": "/",
   "icons": [
     {
-      "src": "/icons/koteseni.png",
-      "sizes": "128x128",
+      "src": "/icons/koteseni-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/koteseni-192.png",
+      "sizes": "192x192",
       "type": "image/png"
     }
   ]
